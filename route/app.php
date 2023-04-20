@@ -15,3 +15,9 @@ Route::get('think', function () {
 });
 
 Route::get('hello/:name', 'index/hello');
+
+// 分类列表模块
+Route::resource('typelist', 'Typelist');
+
+
+Route::post('typelist', 'Typelist/save');
