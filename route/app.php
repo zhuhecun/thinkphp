@@ -19,5 +19,10 @@ Route::get('hello/:name', 'index/hello');
 // 分类列表模块
 Route::resource('typelist', 'Typelist');
 
+Route::get('typelist', 'Typelist/index');
 
 Route::post('typelist', 'Typelist/save');
+
+Route::put('typelist', 'Typelist/update');
+
+Route::delete('typelist', 'Typelist/delete');

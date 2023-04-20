@@ -25,4 +25,9 @@ class Typelist extends Validate
      * @var array
      */
     protected $message = [];
+
+    //验证场景
+    protected $scene = [
+        'edit' => ['name'],
+    ];
 }

@@ -49,11 +49,12 @@ class Typelist
 
         //添加数据
         $res = Db::name('list')->insert($data);
-        if ($res) {
+        if ($res == 1) {
             return json(['code' => 200, 'msg' => '添加成功']);
         } else {
             return json(['code' => 400, 'msg' => '添加失败']);
         }
+
     }
 
     /**
@@ -77,14 +78,34 @@ class Typelist
     public function update(Request $request, $id)
     {
         //
+        $data = $request->param();
 
-        $data = [
-            'id' => '2',
-            'name' => 'equest',
-             ];
+        //验证数据
+        try {
+            //验证通过
+            validate(TypelistValidate::class)->scene('edit')->check($data);
 
-          return Db::name('list')->update($data);
+        } catch (ValidateException $exception) {
 
+            // 验证失败 输出错误信息
+            return json(['code' => 400, 'msg' => $exception->getError()]);
+        }
+
+       //验证
+        $updateData = Db::name('list')->where('id', $id)->find();
+
+      if ($updateData['name'] === $data['name']) {
+                return json(['code' => 400, 'msg' => '修改的和原来的一致']);
+            }
+
+       //更新数据
+        $res = Db::name('list')->where('id', $id)->update($data);
+
+        if ($res == 1) {
+            return json(['code' => 200, 'msg' => '更新成功']);
+        } else {
+            return json(['code' => 400, 'msg' => '更新失败']);
+        }
 
     }
 
@@ -96,7 +117,21 @@ class Typelist
      */
     public function delete($id)
     {
-        //
+        //id
+        if (!Validate::isInteger($id)) {
+            return json(['code' => 400, 'msg' => 'id不合法']);
+        }
+
+        //删除
+          $res = Db::name('list')->delete($id);
+        if ($res == 1) {
+            return json(['code' => 200, 'msg' => '删除成功']);
+        } else {
+
+            // 删除失败
+            return json(['code' => 400, 'msg' => '删除失败']);
+        }
+
     }
 
 
