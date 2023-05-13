@@ -66,6 +66,8 @@ class Typelist
     public function read($id)
     {
         //
+
+
     }
 
     /**

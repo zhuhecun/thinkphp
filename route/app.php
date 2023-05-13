@@ -26,3 +26,15 @@ Route::post('typelist', 'Typelist/save');
 Route::put('typelist', 'Typelist/update');
 
 Route::delete('typelist', 'Typelist/delete');
+
+
+// 用户模块
+Route::resource('user', 'User');
+
+Route::get('user', 'User/index');
+
+Route::post('user', 'User/save');
+
+Route::put('user', 'User/update');
+
+Route::delete('user', 'User/delete');

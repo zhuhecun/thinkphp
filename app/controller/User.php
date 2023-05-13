@@ -3,6 +3,9 @@ declare (strict_types = 1);
 
 namespace app\controller;
 
+use app\validate\User as UserValidate;
+use think\exception\ValidateException;
+use think\facade\Db;
 use think\Request;
 
 class User
@@ -14,8 +17,12 @@ class User
      */
     public function index()
     {
-        //
-        return 0;
+        //查询数据
+
+        $user = Db::name('user')->select();
+
+        return json(['code' => 200, 'msg' => '获取成功', 'data' => $user]);
+
     }
 
     /**
@@ -26,7 +33,31 @@ class User
      */
     public function save(Request $request)
     {
-        //
+        //获取数据
+        $data = $request->param();
+
+        //验证数据
+        try {
+            //验证通过
+            validate(UserValidate::class)->check($data);
+
+        } catch (ValidateException $e) {
+
+            // 验证失败 输出错误信息
+            return json(['code' => 400, 'msg' => $e->getError()]);
+
+        }
+
+        //添加数据
+        $res = Db::name('user')->insert($data);
+
+        if ($res == 1) {
+            return json(['code' => 200, 'msg' => '注册成功']);
+        } else {
+            return json(['code' => 400, 'msg' => '注册失败']);
+        }
+
+
     }
 
     /**
@@ -37,7 +68,14 @@ class User
      */
     public function read($id)
     {
-        //
+        //查询数据
+
+        $user = Db::name('user')->where('id', $id)->select();
+        if ($user) {
+            return json(['code' => 200, 'msg' => '获取成功', 'data' => $user]);
+        } else {
+            return json(['code' => 201, 'msg' => '获取失败']);
+        }
     }
 
     /**
